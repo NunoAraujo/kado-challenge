@@ -1,5 +1,9 @@
 {
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
-  "projects": {}
+  "projects": {
+    "connect-wallet": "packages/connect-wallet",
+    "connect-wallet-demo": "packages/connect-wallet-demo",
+    "connect-wallet-demo-e2e": "packages/connect-wallet-demo-e2e"
+  }
 }

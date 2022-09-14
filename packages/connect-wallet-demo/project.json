@@ -1,0 +1,85 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/connect-wallet-demo/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/packages/connect-wallet-demo",
+        "index": "packages/connect-wallet-demo/src/index.html",
+        "baseHref": "/",
+        "main": "packages/connect-wallet-demo/src/main.tsx",
+        "polyfills": "packages/connect-wallet-demo/src/polyfills.ts",
+        "tsConfig": "packages/connect-wallet-demo/tsconfig.app.json",
+        "assets": [
+          "packages/connect-wallet-demo/src/favicon.ico",
+          "packages/connect-wallet-demo/src/assets"
+        ],
+        "styles": ["packages/connect-wallet-demo/src/styles.scss"],
+        "scripts": [],
+        "webpackConfig": "@nrwl/react/plugins/webpack"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "packages/connect-wallet-demo/src/environments/environment.ts",
+              "with": "packages/connect-wallet-demo/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/web:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "connect-wallet-demo:build",
+        "hmr": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "connect-wallet-demo:build:development"
+        },
+        "production": {
+          "buildTarget": "connect-wallet-demo:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "packages/connect-wallet-demo/**/*.{ts,tsx,js,jsx}"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/connect-wallet-demo"],
+      "options": {
+        "jestConfig": "packages/connect-wallet-demo/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
