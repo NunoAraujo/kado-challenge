@@ -1,13 +1,12 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import styles from './app.module.scss';
-import NxWelcome from './nx-welcome';
+import { ConnectWallet } from '@kado-challenge/connect-wallet';
 
 export function App() {
   return (
-    <>
-      <NxWelcome title="connect-wallet-demo" />
-      <div />
-    </>
+    <div className={styles['container']}>
+      <ConnectWallet />
+    </div>
   );
 }
 

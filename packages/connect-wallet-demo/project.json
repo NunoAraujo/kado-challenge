@@ -19,7 +19,7 @@
           "packages/connect-wallet-demo/src/favicon.ico",
           "packages/connect-wallet-demo/src/assets"
         ],
-        "styles": ["packages/connect-wallet-demo/src/styles.scss"],
+        "styles": ["node_modules/@rainbow-me/rainbowkit/dist/index.css", "packages/connect-wallet-demo/src/styles.scss"],
         "scripts": [],
         "webpackConfig": "@nrwl/react/plugins/webpack"
       },

@@ -1,13 +1,41 @@
-import styles from './connect-wallet.module.scss';
+import 'antd/dist/antd.css';
 
-/* eslint-disable-next-line */
-export interface ConnectWalletProps {}
+import { publicProvider } from 'wagmi/providers/public';
+import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
+import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { Space } from 'antd';
+import Connection from './connection/connection';
+import AssetsBalance from './assets-balance/assets-balance';
 
-export function ConnectWallet(props: ConnectWalletProps) {
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+window.Buffer = window.Buffer || require("buffer").Buffer; 
+
+const { chains, provider } = configureChains(
+  [chain.mainnet, chain.polygon, chain.optimism],
+  [publicProvider()]
+);
+
+const { connectors } = getDefaultWallets({
+  appName: 'Kado Challenge',
+  chains
+});
+
+const wagmiClient = createClient({
+  autoConnect: true,
+  connectors,
+  provider
+})
+
+export function ConnectWallet() {
   return (
-    <div className={styles['container']}>
-      <h1>Welcome to ConnectWallet!</h1>
-    </div>
+    <WagmiConfig client={wagmiClient}>
+      <RainbowKitProvider chains={chains}>
+        <Space direction="vertical" size="large" style={{padding: '1rem'}}>
+          <Connection />
+          <AssetsBalance />
+        </Space>
+      </RainbowKitProvider>
+    </WagmiConfig>
   );
 }
 
