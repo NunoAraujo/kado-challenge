@@ -1,18 +1,16 @@
 import { render } from '@testing-library/react';
-
-import ConnectWallet from './connect-wallet';
+import ConnectWalletProvider from './connect-wallet-provider';
 
 jest.mock('@rainbow-me/rainbowkit', () => ({
-  ConnectButton: {
-    Custom: jest.fn(),
-  },
   getDefaultWallets: jest.fn(() => ({ connectors: [] })),
   RainbowKitProvider: jest.fn(),
 }));
 
-describe('ConnectWallet', () => {
+describe('ConnectWalletProvider', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<ConnectWallet />);
+    const { baseElement } = render(
+      <ConnectWalletProvider>Connect Wallet Content</ConnectWalletProvider>
+    );
     expect(baseElement).toBeTruthy();
   });
 });

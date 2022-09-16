@@ -1,7 +1,7 @@
 import { Avatar, List, Statistic, Typography } from 'antd';
 import { forwardRef } from 'react';
 import { useAccount, useBalance } from 'wagmi';
-import { Token } from '../useTokens';
+import { Token } from '../tokens';
 
 export interface TokenListItemProps {
   token: Token;

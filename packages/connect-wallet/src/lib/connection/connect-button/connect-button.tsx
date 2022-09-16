@@ -5,7 +5,6 @@ export interface ConnectButtonProps {
 }
 
 export function ConnectButton({ openConnectModal }: ConnectButtonProps) {
-  console.log(openConnectModal);
   return (
     <Button
       type="primary"

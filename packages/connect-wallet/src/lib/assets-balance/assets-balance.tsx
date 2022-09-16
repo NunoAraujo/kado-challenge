@@ -3,7 +3,7 @@ import { useAccount, useNetwork } from 'wagmi';
 import TokenListItem from './token-list-item/token-list-item';
 import VirtualList from 'rc-virtual-list';
 import { Alert, Input, List, Space } from 'antd';
-import useTokens, { Token } from './useTokens';
+import { getTokens, Token } from './tokens';
 
 const itemHeight = 88.71;
 const itemsToShow = 5;
@@ -12,7 +12,6 @@ const itemsToLoad = 20;
 export function AssetsBalance() {
   const { isConnected } = useAccount();
   const { chain } = useNetwork();
-  const { getTokens } = useTokens();
 
   const [tokens, setTokens] = useState<Token[]>();
   const [lastIndex, setLastIndex] = useState(itemsToLoad);
@@ -48,7 +47,7 @@ export function AssetsBalance() {
     (async () => {
       setTokens(chain ? await getTokens(chain.name) : []);
     })();
-  }, [chain, getTokens]);
+  }, [chain]);
 
   return isConnected ? (
     <Space direction="vertical" style={{ width: '100%' }}>

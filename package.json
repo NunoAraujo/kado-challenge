@@ -2,7 +2,11 @@
   "name": "kado-challenge",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build": "npx nx build connect-wallet",
+    "serve": "npx nx serve connect-wallet-demo",
+    "test": "npx nx test connect-wallet"
+  },
   "private": true,
   "devDependencies": {
     "@nrwl/cli": "14.7.5",
