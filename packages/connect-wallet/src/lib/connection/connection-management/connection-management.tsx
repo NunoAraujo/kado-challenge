@@ -33,6 +33,7 @@ export function ConnectionManagement({
   return (
     <Space>
       <Button
+        data-testid="chain-btn"
         type="default"
         size="large"
         shape="round"
@@ -56,18 +57,10 @@ export function ConnectionManagement({
       </Button>
 
       <Button
+        data-testid="account-btn"
         type="default"
         size="large"
         shape="round"
-        icon={
-          account.ensAvatar && (
-            <Avatar
-              size="small"
-              src={account.ensAvatar}
-              style={{ marginRight: '0.5rem' }}
-            />
-          )
-        }
         onClick={openAccountModal}
       >
         {account.address}

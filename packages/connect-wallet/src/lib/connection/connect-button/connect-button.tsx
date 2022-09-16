@@ -7,6 +7,7 @@ export interface ConnectButtonProps {
 export function ConnectButton({ openConnectModal }: ConnectButtonProps) {
   return (
     <Button
+      data-testid="connect-btn"
       type="primary"
       size="large"
       shape="round"

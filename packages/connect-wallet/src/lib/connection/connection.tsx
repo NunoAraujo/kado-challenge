@@ -17,6 +17,7 @@ export function Connection() {
 
         return (
           <div
+            data-testid="connect-container"
             {...(!mounted && {
               'aria-hidden': true,
               style: {
