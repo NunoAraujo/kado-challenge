@@ -2,11 +2,16 @@
   "name": "kado-challenge",
   "version": "0.0.0",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NunoAraujo/kado-challenge.git"
+  },
   "scripts": {
     "build": "npx nx build connect-wallet",
     "build-demo": "npx nx build connect-wallet-demo",
     "serve": "npx nx serve connect-wallet-demo",
-    "test": "npx nx test connect-wallet"
+    "test": "npx nx test connect-wallet",
+    "ci": "npm run build"
   },
   "private": true,
   "devDependencies": {
