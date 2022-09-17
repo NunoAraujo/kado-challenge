@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "build": "npx nx build connect-wallet",
+    "build-demo": "npx nx build connect-wallet-demo",
     "serve": "npx nx serve connect-wallet-demo",
     "test": "npx nx test connect-wallet"
   },
