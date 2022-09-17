@@ -6,6 +6,9 @@
     "type": "git",
     "url": "https://github.com/NunoAraujo/kado-challenge.git"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "scripts": {
     "build": "npx nx build connect-wallet",
     "build-demo": "npx nx build connect-wallet-demo",
@@ -13,7 +16,6 @@
     "test": "npx nx test connect-wallet",
     "ci": "npm run build"
   },
-  "private": true,
   "devDependencies": {
     "@nrwl/cli": "14.7.5",
     "@nrwl/cypress": "14.7.5",
