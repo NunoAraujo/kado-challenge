@@ -64,6 +64,7 @@ export function ConnectionManagement({
         onClick={openAccountModal}
       >
         {account.address}
+        {account.displayBalance ? ` (${account.displayBalance})` : ''}
       </Button>
     </Space>
   );

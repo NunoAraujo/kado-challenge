@@ -18,14 +18,16 @@ export function Connection() {
         return (
           <div
             data-testid="connect-container"
-            {...(!mounted && {
-              'aria-hidden': true,
-              style: {
-                opacity: 0,
-                pointerEvents: 'none',
-                userSelect: 'none',
-              },
-            })}
+            {...(!mounted
+              ? {
+                  'aria-hidden': true,
+                  style: {
+                    opacity: 0,
+                    pointerEvents: 'none',
+                    userSelect: 'none',
+                  },
+                }
+              : { style: { display: 'flex', justifyContent: 'center' } })}
           >
             {connected ? (
               <ConnectionManagement

@@ -3,17 +3,17 @@ import { ReactNode } from 'react';
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
 
-const { chains, provider } = configureChains(
+export const { chains, provider } = configureChains(
   [chain.mainnet, chain.polygon, chain.optimism],
   [publicProvider()]
 );
 
-const { connectors } = getDefaultWallets({
+export const { connectors } = getDefaultWallets({
   appName: 'Kado Challenge',
   chains,
 });
 
-const wagmiClient = createClient({
+export const wagmiClient = createClient({
   autoConnect: true,
   connectors,
   provider,

@@ -21,7 +21,7 @@ jest.mock('@rainbow-me/rainbowkit', () => ({
       }),
   },
   getDefaultWallets: () => ({ connectors: [] }),
-  RainbowKitProvider: ({ children }: any) => children,
+  RainbowKitProvider: ({ children }: { children: unknown }) => children,
 }));
 
 describe('Connection', () => {
@@ -53,7 +53,7 @@ describe('Connection', () => {
 
     it('should show the container and the connect button', () => {
       expect(getConnectContainer().getAttribute('aria-hidden')).toBe(null);
-      expect(getConnectContainer().getAttribute('style')).toBe(null);
+      expect(getConnectContainer().getAttribute('style')).toBe('display: flex; justify-content: center;');
       expect(getConnectButton()).toBeTruthy();
     });
 
@@ -72,7 +72,7 @@ describe('Connection', () => {
 
     it('should show the container and the connection management buttons', () => {
       expect(getConnectContainer().getAttribute('aria-hidden')).toBe(null);
-      expect(getConnectContainer().getAttribute('style')).toBe(null);
+      expect(getConnectContainer().getAttribute('style')).toBe('display: flex; justify-content: center;');
       expect(getChainButton()).toBeTruthy();
       expect(getAccountButton()).toBeTruthy();
     });

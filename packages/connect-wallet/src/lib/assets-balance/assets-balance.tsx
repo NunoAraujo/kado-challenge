@@ -1,21 +1,26 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Ref, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAccount, useNetwork } from 'wagmi';
-import TokenListItem from './token-list-item/token-list-item';
+import TokenListItem, { itemHeight } from './token-list-item/token-list-item';
 import VirtualList from 'rc-virtual-list';
-import { Alert, Input, List, Space } from 'antd';
+import { Alert, Input, InputRef, List, Space } from 'antd';
 import { getTokens, Token } from './tokens';
 
-const itemHeight = 88.71;
 const itemsToShow = 5;
 const itemsToLoad = 20;
+
+export const unsupportedChainErrorMsg =
+  'Unsupported chain. Please select another chain.';
+export const searchTokensPlaceHolder = 'Search tokens';
 
 export function AssetsBalance() {
   const { isConnected } = useAccount();
   const { chain } = useNetwork();
 
   const [tokens, setTokens] = useState<Token[]>();
+  const [loadingTokens, setLoadingTokens] = useState(false);
   const [lastIndex, setLastIndex] = useState(itemsToLoad);
   const [filter, setFilter] = useState('');
+  const searchInputRef = useRef<InputRef>();
 
   const filteredTokens = useMemo(
     () =>
@@ -30,7 +35,10 @@ export function AssetsBalance() {
   );
 
   const data = useMemo(
-    () => filteredTokens.slice(0, lastIndex),
+    () =>
+      filteredTokens
+        .slice(0, filteredTokens.length - 1 < lastIndex ? lastIndex : undefined)
+        .sort((a, b) => a.symbol.localeCompare(b.symbol)),
     [lastIndex, filteredTokens]
   );
 
@@ -43,9 +51,10 @@ export function AssetsBalance() {
   );
 
   useEffect(() => {
-    setFilter('');
     (async () => {
+      setLoadingTokens(true);
       setTokens(chain ? await getTokens(chain.name) : []);
+      setLoadingTokens(false);
     })();
   }, [chain]);
 
@@ -54,34 +63,33 @@ export function AssetsBalance() {
       {chain && !chain.unsupported ? (
         <>
           <Input.Search
+            ref={searchInputRef as Ref<InputRef>}
             allowClear
             enterButton
-            placeholder="Search tokens"
+            placeholder={searchTokensPlaceHolder}
             onSearch={(value) => setFilter(value)}
           />
-          <List>
-            <VirtualList
-              data={data}
-              height={itemHeight * itemsToShow}
-              itemHeight={itemHeight}
-              itemKey={(token) => token.address}
-              onScroll={onScroll}
-            >
-              {(token) => <TokenListItem {...{ token }} />}
-            </VirtualList>
+          <List data-testid="assets-balance-list">
+            {loadingTokens ? (
+              Array.from(Array(itemsToShow).keys()).map((item) => (
+                <TokenListItem key={item} />
+              ))
+            ) : (
+              <VirtualList
+                height={itemHeight * itemsToShow}
+                itemKey={(token) => token.address}
+                {...{ data, itemHeight, onScroll }}
+              >
+                {(token) => <TokenListItem {...{ token }} />}
+              </VirtualList>
+            )}
           </List>
         </>
       ) : (
-        <Alert
-          message="Unsupported chain. Please select another chain."
-          type="error"
-          showIcon
-        />
+        <Alert message={unsupportedChainErrorMsg} type="error" showIcon />
       )}
     </Space>
-  ) : (
-    <div></div>
-  );
+  ) : null;
 }
 
 export default AssetsBalance;

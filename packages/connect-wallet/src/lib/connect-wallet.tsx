@@ -10,7 +10,7 @@ window.Buffer = window.Buffer || require('buffer').Buffer;
 export function ConnectWallet() {
   return (
     <ConnectWalletProvider>
-      <Space direction="vertical" size="large" style={{ padding: '1rem' }}>
+      <Space direction="vertical" size="large" style={{ width: '100%', padding: '1rem' }}>
         <Connection />
         <AssetsBalance />
       </Space>
