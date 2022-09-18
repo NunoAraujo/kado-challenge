@@ -4,7 +4,7 @@ import TokenListItem, { itemHeight } from './token-list-item/token-list-item';
 import VirtualList from 'rc-virtual-list';
 import { Alert, Input, InputRef, List, Space } from 'antd';
 import { getTokens, Token } from './tokens';
-import { ConnectWalletContext } from '../connect-wallet-provider/connect-wallet-provider';
+import { ConnectWalletContext } from '../connect-wallet-provider/connect-wallet-context';
 
 const itemsToLoad = 20;
 

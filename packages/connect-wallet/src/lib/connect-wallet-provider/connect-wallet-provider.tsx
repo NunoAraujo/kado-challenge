@@ -1,14 +1,8 @@
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { createContext, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
-
-export const ConnectWalletContextDefaultValue ={
-  condensed: false,
-  itemsToShow: 5
-}
-
-export const ConnectWalletContext = createContext(ConnectWalletContextDefaultValue);
+import { ConnectWalletContext, ConnectWalletContextDefaultValue } from './connect-wallet-context';
 
 export const { chains, provider } = configureChains(
   [chain.mainnet, chain.polygon, chain.optimism],

@@ -1,7 +1,7 @@
 import { Avatar, List, Skeleton, Statistic, Typography } from 'antd';
 import { forwardRef, useContext } from 'react';
 import { useAccount, useBalance } from 'wagmi';
-import { ConnectWalletContext } from '../../connect-wallet-provider/connect-wallet-provider';
+import { ConnectWalletContext } from '../../connect-wallet-provider/connect-wallet-context';
 import { Token } from '../tokens';
 
 export const itemHeight = 73;

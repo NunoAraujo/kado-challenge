@@ -1,8 +1,13 @@
 import { render, screen } from '@testing-library/react';
+import {
+  ConnectWalletContext,
+  ConnectWalletContextDefaultValue,
+} from '../../connect-wallet-provider/connect-wallet-context';
 import { Token } from '../tokens';
 import TokenListItem from './token-list-item';
 
 const mockData = { formatted: '0.0' };
+const mockConnectWalletContext = ConnectWalletContextDefaultValue;
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -25,8 +30,14 @@ jest.mock('wagmi', () => ({
 
 describe('TokenListItem', () => {
   let token: Token | undefined;
-
-  const renderComponent = () => render(<TokenListItem {...{ token }} />);
+  const getListItemMeta = () => screen.getByTestId('token-list-item-meta');
+  const getListItemData = () => screen.getByTestId('token-list-item-data');
+  const renderComponent = () =>
+    render(
+      <ConnectWalletContext.Provider value={mockConnectWalletContext}>
+        <TokenListItem {...{ token }} />
+      </ConnectWalletContext.Provider>
+    );
 
   describe('when rendering', () => {
     beforeEach(() => renderComponent());
@@ -36,9 +47,6 @@ describe('TokenListItem', () => {
   });
 
   describe('when token is passed', () => {
-    const getListItemMeta = () => screen.getByTestId('token-list-item-meta');
-    const getListItemData = () => screen.getByTestId('token-list-item-data');
-
     beforeEach(() => {
       token = {
         logoURI: 'https://placeholder.com/50',
@@ -70,14 +78,37 @@ describe('TokenListItem', () => {
       ).toBe(token?.name);
     });
 
-    it('should render formatted balance', () =>
-      expect(
-        getListItemData().getElementsByClassName('ant-typography').item(0)
-          ?.innerHTML
-      ).toBe(mockData.formatted));
+    it('should render formatted balance with font size of 18px', () => {
+      const typography = getListItemData()
+        .getElementsByClassName('ant-typography')
+        .item(0);
+      expect(typography?.innerHTML).toBe(mockData.formatted);
+      expect(typography?.getAttribute('style')).toContain('font-size: 24px');
+    });
 
     afterEach(() => {
       token = undefined;
+    });
+  });
+
+  describe('when token is passed and is condensed', () => {
+    beforeEach(() => {
+      token = {} as Token;
+      mockConnectWalletContext.condensed = true;
+      renderComponent();
+    });
+
+    it('should render formatted balance with font size of 18px', () =>
+      expect(
+        getListItemData()
+          .getElementsByClassName('ant-typography')
+          .item(0)
+          ?.getAttribute('style')
+      ).toContain('font-size: 18px'));
+
+    afterEach(() => {
+      token = undefined;
+      mockConnectWalletContext.condensed = false;
     });
   });
 });

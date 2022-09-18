@@ -1,6 +1,6 @@
 import { Avatar, Button, Space } from 'antd';
 import { useContext } from 'react';
-import { ConnectWalletContext } from '../../connect-wallet-provider/connect-wallet-provider';
+import { ConnectWalletContext } from '../../connect-wallet-provider/connect-wallet-context';
 
 export interface ConnectionManagementProps {
   account: {

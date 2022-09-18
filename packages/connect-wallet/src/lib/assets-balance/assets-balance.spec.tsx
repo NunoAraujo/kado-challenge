@@ -1,8 +1,13 @@
 import { act, render, screen } from '@testing-library/react';
+import {
+  ConnectWalletContext,
+  ConnectWalletContextDefaultValue,
+} from '../connect-wallet-provider/connect-wallet-context';
 import AssetsBalance, {
   searchTokensPlaceHolder,
   unsupportedChainErrorMsg,
 } from './assets-balance';
+import { itemHeight } from './token-list-item/token-list-item';
 
 const mockAccount = {
   isConnected: false,
@@ -13,6 +18,7 @@ const mockNetwork = {
 };
 
 const mockTokens = [{ address: 'testTokenAddress' }];
+const mockConnectWalletContext = ConnectWalletContextDefaultValue;
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -39,7 +45,12 @@ jest.mock('./tokens', () => ({
 }));
 
 describe('AssetsBalance', () => {
-  const renderComponent = () => render(<AssetsBalance />);
+  const renderComponent = () =>
+    render(
+      <ConnectWalletContext.Provider value={mockConnectWalletContext}>
+        <AssetsBalance />
+      </ConnectWalletContext.Provider>
+    );
 
   describe('when rendering component', () => {
     beforeEach(
@@ -84,8 +95,16 @@ describe('AssetsBalance', () => {
         screen.getByPlaceholderText(searchTokensPlaceHolder)
       ).toBeTruthy());
 
-    it('should render list', () =>
-      expect(screen.getByTestId('assets-balance-list')).toBeTruthy());
+    it('should render list with correct height', () =>
+      expect(
+        screen
+          .getByTestId('assets-balance-list')
+          .getElementsByClassName('rc-virtual-list-holder')
+          .item(0)
+          ?.getAttribute('style')
+      ).toContain(
+        `height: ${itemHeight * mockConnectWalletContext.itemsToShow}px`
+      ));
 
     afterEach(() => {
       mockAccount.isConnected = false;
