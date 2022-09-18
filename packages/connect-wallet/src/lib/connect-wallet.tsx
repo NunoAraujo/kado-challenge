@@ -7,10 +7,22 @@ import ConnectWalletProvider from './connect-wallet-provider/connect-wallet-prov
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 window.Buffer = window.Buffer || require('buffer').Buffer;
 
-export function ConnectWallet() {
+export interface ConnectWalletProps {
+  condensed?: boolean;
+  itemsToShow?: number;
+}
+
+export function ConnectWallet({
+  condensed,
+  itemsToShow,
+}: ConnectWalletProps) {
   return (
-    <ConnectWalletProvider>
-      <Space direction="vertical" size="large" style={{ width: '100%', padding: '1rem' }}>
+    <ConnectWalletProvider {...{ condensed, itemsToShow }}>
+      <Space
+        direction="vertical"
+        size="large"
+        style={{ width: '100%', padding: '1rem' }}
+      >
         <Connection />
         <AssetsBalance />
       </Space>

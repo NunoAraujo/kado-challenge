@@ -1,11 +1,11 @@
-import { Ref, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Ref, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useAccount, useNetwork } from 'wagmi';
 import TokenListItem, { itemHeight } from './token-list-item/token-list-item';
 import VirtualList from 'rc-virtual-list';
 import { Alert, Input, InputRef, List, Space } from 'antd';
 import { getTokens, Token } from './tokens';
+import { ConnectWalletContext } from '../connect-wallet-provider/connect-wallet-provider';
 
-const itemsToShow = 5;
 const itemsToLoad = 20;
 
 export const unsupportedChainErrorMsg =
@@ -15,6 +15,7 @@ export const searchTokensPlaceHolder = 'Search tokens';
 export function AssetsBalance() {
   const { isConnected } = useAccount();
   const { chain } = useNetwork();
+  const { itemsToShow } = useContext(ConnectWalletContext);
 
   const [tokens, setTokens] = useState<Token[]>();
   const [loadingTokens, setLoadingTokens] = useState(false);
@@ -47,7 +48,7 @@ export function AssetsBalance() {
       e.currentTarget.scrollHeight - e.currentTarget.scrollTop <=
         Math.round(itemHeight * itemsToShow) &&
       setLastIndex(data.length + itemsToLoad),
-    [data]
+    [data, itemsToShow]
   );
 
   useEffect(() => {
