@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@kado-challenge/connect-wallet": ["packages/connect-wallet/src/index.ts"]
+      "@nunoaraujo/connect-wallet": ["packages/connect-wallet/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

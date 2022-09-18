@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import styles from './app.module.scss';
-import { ConnectWallet } from '@kado-challenge/connect-wallet';
+import { ConnectWallet } from '@nunoaraujo/connect-wallet';
 
 export function App() {
   return (
