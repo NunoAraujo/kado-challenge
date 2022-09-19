@@ -11,7 +11,6 @@ import { useAccount, useNetwork } from 'wagmi';
 import TokenListItem, { itemHeight } from './token-list-item/token-list-item';
 import VirtualList from 'rc-virtual-list';
 import { Alert, AutoComplete, Input, InputRef, List, Space } from 'antd';
-import { BaseSelectRef } from 'rc-select';
 import { getTokens, Token } from './tokens';
 import { ConnectWalletContext } from '../connect-wallet-provider/connect-wallet-context';
 
@@ -112,12 +111,12 @@ export function AssetsBalance() {
             style={{ width: '100%' }}
             onSelect={onSelect}
             onSearch={onSearch}
-            placeholder={searchTokensPlaceHolder}
           >
             <Input.Search
               ref={searchInputRef as Ref<InputRef>}
               allowClear
               enterButton
+              placeholder={searchTokensPlaceHolder}
               onSearch={(value) => setFilter(value)}
             />
           </AutoComplete>
