@@ -1,5 +1,6 @@
 import {
   Ref,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -9,7 +10,7 @@ import {
 import { useAccount, useNetwork } from 'wagmi';
 import TokenListItem, { itemHeight } from './token-list-item/token-list-item';
 import VirtualList from 'rc-virtual-list';
-import { Alert, Input, InputRef, List, Space } from 'antd';
+import { Alert, AutoComplete, Input, InputRef, List, Space } from 'antd';
 import { getTokens, Token } from './tokens';
 import { ConnectWalletContext } from '../connect-wallet-provider/connect-wallet-context';
 
@@ -26,17 +27,66 @@ export function AssetsBalance() {
   const [loadingTokens, setLoadingTokens] = useState(false);
   const [filter, setFilter] = useState('');
   const searchInputRef = useRef<InputRef>();
+  const [options, setOptions] = useState<{ label: string; value: string }[]>(
+    []
+  );
 
-  const filteredTokens = useMemo(
-    () =>
-      filter === ''
+  const onSelect = () => {
+    setOptions([]);
+
+    // Wait for ui to update and then simulate click event on input
+    setTimeout(() => {
+      searchInputRef.current?.input?.dispatchEvent(
+        new KeyboardEvent('keydown', {
+          altKey: false,
+          bubbles: true,
+          cancelable: true,
+          charCode: 0,
+          code: 'Enter',
+          composed: true,
+          ctrlKey: false,
+          detail: 0,
+          isComposing: false,
+          key: 'Enter',
+          keyCode: 13,
+          location: 0,
+          metaKey: false,
+          repeat: false,
+          shiftKey: false,
+          which: 13,
+        })
+      );
+    }, 0);
+  };
+
+  const filterTokens = useCallback(
+    (value: string) =>
+      value === ''
         ? tokens || []
         : tokens?.filter(
-            (item) =>
-              item.name.toLowerCase().includes(filter.toLowerCase()) ||
-              item.symbol.toLowerCase().includes(filter.toLowerCase())
+            (token) =>
+              token.name.toLowerCase().includes(value.toLowerCase()) ||
+              token.symbol.toLowerCase().includes(value.toLowerCase()) ||
+              token.address.toLowerCase().includes(value.toLowerCase())
           ) || [],
-    [filter, tokens]
+    [tokens]
+  );
+
+  const onSearch = useCallback(
+    (searchText: string) => {
+      setOptions(
+        filterTokens(searchText).map((token) => ({
+          label: token.symbol,
+          value: token.address,
+        }))
+      );
+    },
+    [filterTokens]
+  );
+
+  const filteredTokens = useMemo(
+    () => filterTokens(filter),
+    [filter, filterTokens]
   );
 
   const data = useMemo(
@@ -56,13 +106,20 @@ export function AssetsBalance() {
     <Space direction="vertical" style={{ width: '100%' }}>
       {chain && !chain.unsupported ? (
         <>
-          <Input.Search
-            ref={searchInputRef as Ref<InputRef>}
-            allowClear
-            enterButton
-            placeholder={searchTokensPlaceHolder}
-            onSearch={(value) => setFilter(value)}
-          />
+          <AutoComplete
+            options={options}
+            style={{ width: '100%' }}
+            onSelect={onSelect}
+            onSearch={onSearch}
+          >
+            <Input.Search
+              ref={searchInputRef as Ref<InputRef>}
+              allowClear
+              enterButton
+              placeholder={searchTokensPlaceHolder}
+              onSearch={(value) => setFilter(value)}
+            />
+          </AutoComplete>
           <List data-testid="assets-balance-list">
             {loadingTokens ? (
               Array.from(Array(itemsToShow).keys()).map((item) => (
