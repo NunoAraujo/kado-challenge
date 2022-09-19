@@ -1,5 +1,9 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {
+  ConnectWalletContext,
+  ConnectWalletContextDefaultValue,
+} from '../../connect-wallet-provider/connect-wallet-context';
 import ConnectionManagement, {
   ConnectionManagementProps,
 } from './connection-management';
@@ -7,6 +11,8 @@ import {
   getAccountButton,
   getChainButton,
 } from './connection-management.utils';
+
+const mockConnectWalletContext = ConnectWalletContextDefaultValue;
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -31,14 +37,16 @@ describe('ConnectButton', () => {
   const openAccountModal = jest.fn();
   const renderComponent = () =>
     render(
-      <ConnectionManagement
-        {...{ account, chain, openChainModal, openAccountModal }}
-      />
+      <ConnectWalletContext.Provider value={mockConnectWalletContext}>
+        <ConnectionManagement
+          {...{ account, chain, openChainModal, openAccountModal }}
+        />
+      </ConnectWalletContext.Provider>
     );
 
   describe('when rendering component', () => {
     beforeEach(() => renderComponent());
-    
+
     it('should render chain name inside chain button', async () =>
       expect(
         getChainButton().getElementsByTagName('span').item(0)?.innerHTML
@@ -48,6 +56,9 @@ describe('ConnectButton', () => {
       expect(
         getAccountButton().getElementsByTagName('span').item(0)?.innerHTML
       ).toBe(account.address));
+
+    it('should render button with large size', () =>
+      expect(getAccountButton().classList).toContain('ant-btn-lg'));
 
     describe('when clicking chain button', () => {
       beforeEach(async () => {
@@ -102,6 +113,20 @@ describe('ConnectButton', () => {
       expect(chainBtn.getElementsByTagName('span').item(1)?.innerHTML).toBe(
         chain.name
       );
+    });
+  });
+
+  describe('when condensed', () => {
+    beforeEach(() => {
+      mockConnectWalletContext.condensed = true;
+      renderComponent();
+    });
+
+    it('should render button with medium size', () =>
+      expect(getAccountButton().classList).not.toContain('ant-btn-md'));
+
+    afterEach(() => {
+      mockConnectWalletContext.condensed = false;
     });
   });
 });
