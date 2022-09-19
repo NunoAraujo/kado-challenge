@@ -1,4 +1,11 @@
 {
-  "name": "@nunoaraujo/connect-wallet",
-  "version": "0.0.2"
+  "name": "@nunoaraujo/kado-challenge",
+  "version": "0.0.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NunoAraujo/kado-challenge.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  }
 }

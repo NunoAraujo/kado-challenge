@@ -14,8 +14,7 @@
     "build": "npx nx build connect-wallet",
     "build-demo": "npx nx build connect-wallet-demo",
     "serve": "npx nx serve connect-wallet-demo",
-    "test": "npx nx test connect-wallet",
-    "ci": "npm run build"
+    "test": "npx nx test connect-wallet"
   },
   "devDependencies": {
     "@nrwl/cli": "14.7.5",
