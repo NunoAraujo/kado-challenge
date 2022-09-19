@@ -11,6 +11,7 @@ import { useAccount, useNetwork } from 'wagmi';
 import TokenListItem, { itemHeight } from './token-list-item/token-list-item';
 import VirtualList from 'rc-virtual-list';
 import { Alert, AutoComplete, Input, InputRef, List, Space } from 'antd';
+import { BaseSelectRef } from 'rc-select';
 import { getTokens, Token } from './tokens';
 import { ConnectWalletContext } from '../connect-wallet-provider/connect-wallet-context';
 
@@ -31,17 +32,32 @@ export function AssetsBalance() {
     []
   );
 
-  const onSearch = (searchText: string) => {
-    setOptions(
-      filterTokens(searchText).map((token) => ({
-        label: token.symbol,
-        value: token.address,
-      }))
-    );
-  };
+  const onSelect = () => {
+    setOptions([]);
 
-  const onSelect = (data: string) => {
-    console.log('onSelect', data);
+    // Wait for ui to update and then simulate click event on input
+    setTimeout(() => {
+      searchInputRef.current?.input?.dispatchEvent(
+        new KeyboardEvent('keydown', {
+          altKey: false,
+          bubbles: true,
+          cancelable: true,
+          charCode: 0,
+          code: 'Enter',
+          composed: true,
+          ctrlKey: false,
+          detail: 0,
+          isComposing: false,
+          key: 'Enter',
+          keyCode: 13,
+          location: 0,
+          metaKey: false,
+          repeat: false,
+          shiftKey: false,
+          which: 13,
+        })
+      );
+    }, 0);
   };
 
   const filterTokens = useCallback(
@@ -55,6 +71,18 @@ export function AssetsBalance() {
               token.address.toLowerCase().includes(value.toLowerCase())
           ) || [],
     [tokens]
+  );
+
+  const onSearch = useCallback(
+    (searchText: string) => {
+      setOptions(
+        filterTokens(searchText).map((token) => ({
+          label: token.symbol,
+          value: token.address,
+        }))
+      );
+    },
+    [filterTokens]
   );
 
   const filteredTokens = useMemo(
@@ -81,7 +109,6 @@ export function AssetsBalance() {
         <>
           <AutoComplete
             options={options}
-            //dropdownMatchSelectWidth={200}
             style={{ width: '100%' }}
             onSelect={onSelect}
             onSearch={onSearch}
