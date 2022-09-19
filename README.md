@@ -8,6 +8,16 @@ This project was generated using [Nx](https://nx.dev).
 
 🔎 **Smart, Fast and Extensible Build System**
 
+## How to use
+
+```js
+import { ConnectWallet } from '@nunoaraujo/kado-challenge';
+
+export function App() {
+  return <ConnectWallet condensed={false} itemToShow={5}/>;
+}
+````
+
 ## Build connect-wallet lib
 
 Run `npm run build`.
