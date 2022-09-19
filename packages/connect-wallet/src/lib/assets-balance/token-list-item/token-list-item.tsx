@@ -1,9 +1,10 @@
 import { Avatar, List, Skeleton, Statistic, Typography } from 'antd';
-import { forwardRef } from 'react';
+import { forwardRef, useContext } from 'react';
 import { useAccount, useBalance } from 'wagmi';
+import { ConnectWalletContext } from '../../connect-wallet-provider/connect-wallet-context';
 import { Token } from '../tokens';
 
-export const itemHeight = 88.71;
+export const itemHeight = 73;
 
 export interface TokenListItemProps {
   token?: Token;
@@ -14,8 +15,12 @@ export const TokenListItem = forwardRef(
     const { address } = useAccount();
     const { data } = useBalance({
       addressOrName: address,
-      token: token?.address,
+      token:
+        token && token.address !== '0x0000000000000000000000000000000000000000'
+          ? token.address
+          : undefined,
     });
+    const { condensed } = useContext(ConnectWalletContext);
 
     return token ? (
       <List.Item>
@@ -27,10 +32,10 @@ export const TokenListItem = forwardRef(
         />
         <div data-testid="token-list-item-data" style={{ maxWidth: '50%' }}>
           <Statistic
-            title="Balance"
             valueRender={() => (
               <Typography.Text
                 ellipsis={{ tooltip: { title: data?.formatted } }}
+                style={{ fontSize: condensed ? 18 : 24 }}
               >
                 {data?.formatted || '0.0'}
               </Typography.Text>
@@ -40,7 +45,10 @@ export const TokenListItem = forwardRef(
         </div>
       </List.Item>
     ) : (
-      <List.Item data-testid="token-list-item-skeleton" style={{height: itemHeight + 'px'}}>
+      <List.Item
+        data-testid="token-list-item-skeleton"
+        style={{ height: itemHeight + 'px' }}
+      >
         <Skeleton avatar paragraph={{ rows: 0 }} active />
       </List.Item>
     );

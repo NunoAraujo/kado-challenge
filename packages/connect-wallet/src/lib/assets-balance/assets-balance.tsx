@@ -1,12 +1,17 @@
-import { Ref, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  Ref,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useAccount, useNetwork } from 'wagmi';
 import TokenListItem, { itemHeight } from './token-list-item/token-list-item';
 import VirtualList from 'rc-virtual-list';
 import { Alert, Input, InputRef, List, Space } from 'antd';
 import { getTokens, Token } from './tokens';
-
-const itemsToShow = 5;
-const itemsToLoad = 20;
+import { ConnectWalletContext } from '../connect-wallet-provider/connect-wallet-context';
 
 export const unsupportedChainErrorMsg =
   'Unsupported chain. Please select another chain.';
@@ -15,10 +20,10 @@ export const searchTokensPlaceHolder = 'Search tokens';
 export function AssetsBalance() {
   const { isConnected } = useAccount();
   const { chain } = useNetwork();
+  const { itemsToShow } = useContext(ConnectWalletContext);
 
   const [tokens, setTokens] = useState<Token[]>();
   const [loadingTokens, setLoadingTokens] = useState(false);
-  const [lastIndex, setLastIndex] = useState(itemsToLoad);
   const [filter, setFilter] = useState('');
   const searchInputRef = useRef<InputRef>();
 
@@ -35,19 +40,8 @@ export function AssetsBalance() {
   );
 
   const data = useMemo(
-    () =>
-      filteredTokens
-        .slice(0, filteredTokens.length - 1 < lastIndex ? lastIndex : undefined)
-        .sort((a, b) => a.symbol.localeCompare(b.symbol)),
-    [lastIndex, filteredTokens]
-  );
-
-  const onScroll = useCallback(
-    (e: React.UIEvent<HTMLElement, UIEvent>) =>
-      e.currentTarget.scrollHeight - e.currentTarget.scrollTop <=
-        Math.round(itemHeight * itemsToShow) &&
-      setLastIndex(data.length + itemsToLoad),
-    [data]
+    () => filteredTokens.sort((a, b) => a.symbol.localeCompare(b.symbol)),
+    [filteredTokens]
   );
 
   useEffect(() => {
@@ -78,7 +72,7 @@ export function AssetsBalance() {
               <VirtualList
                 height={itemHeight * itemsToShow}
                 itemKey={(token) => token.address}
-                {...{ data, itemHeight, onScroll }}
+                {...{ data, itemHeight }}
               >
                 {(token) => <TokenListItem {...{ token }} />}
               </VirtualList>

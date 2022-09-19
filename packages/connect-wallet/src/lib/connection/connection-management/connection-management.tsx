@@ -1,4 +1,6 @@
 import { Avatar, Button, Space } from 'antd';
+import { useContext } from 'react';
+import { ConnectWalletContext } from '../../connect-wallet-provider/connect-wallet-context';
 
 export interface ConnectionManagementProps {
   account: {
@@ -30,17 +32,18 @@ export function ConnectionManagement({
   openChainModal,
   openAccountModal,
 }: ConnectionManagementProps) {
+  const { condensed } = useContext(ConnectWalletContext);
   return (
     <Space>
       <Button
         data-testid="chain-btn"
         type="default"
-        size="large"
+        size={condensed ? 'middle' : 'large'}
         shape="round"
         icon={
           chain.hasIcon && (
             <Avatar
-              size="small"
+              size={condensed ? 18 : 24}
               src={chain.iconUrl}
               alt={chain.name ?? 'Chain icon'}
               style={{
@@ -59,11 +62,11 @@ export function ConnectionManagement({
       <Button
         data-testid="account-btn"
         type="default"
-        size="large"
+        size={condensed ? 'middle' : 'large'}
         shape="round"
         onClick={openAccountModal}
       >
-        {account.address}
+        {condensed ? account.displayName : account.address}
         {account.displayBalance ? ` (${account.displayBalance})` : ''}
       </Button>
     </Space>
